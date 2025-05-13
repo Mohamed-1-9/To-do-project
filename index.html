@@ -1,0 +1,120 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Messy ToDo</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 20px;
+    }
+    h1 {
+      color: #333;
+    }
+    input[type="text"] {
+      width: 200px;
+      padding: 10px;
+      margin-right: 10px;
+      margin-bottom: 20px;
+    }
+    button {
+      padding: 10px 15px;
+      background-color: #28a745;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #218838;
+    }
+    ul {
+      list-style-type: none;
+      padding: 0;
+    }
+    li {
+      background-color: #fff;
+      margin-bottom: 10px;
+      padding: 10px;
+      border-radius: 5px;
+    }
+    </style>
+</head>
+<body>
+  <h1>Todo List</h1>
+  <input id="taskInput" type="text">
+  <button type="button" onclick="addTask()">Add Task</button>
+  <ul id="taskList"></ul>
+
+  <script>
+    var data = [];
+    var counter = 0;
+
+    function addTask() {
+      var input = document.getElementById("taskInput");
+      var task = input.value;
+      if (!(/^\s*$/.test(task))) {
+        
+        data[counter] = {
+          id: counter,
+          name: task,
+          done: false
+        };
+        counter++;
+        input.value = "";
+        display ();
+      }
+      else {
+        alert("Please enter a valid task.");
+      }
+    }
+
+    function display () {
+      var ul = document.getElementById("taskList");
+      ul.innerHTML = "";
+      for (let i = 0; i < data.length; i++) {
+        if (typeof data[i] !== "undefined") {
+          var li = document.createElement("li");
+          li.innerHTML = data[i].name + 
+            " <button onclick='toggle(" + i + ")'>Toggle</button> " +
+            " <button onclick='deleteTask(" + i + ")'>Delete</button>";
+          if (data[i].done === true) {
+            li.style.textDecoration = "line-through";
+          }
+          ul.appendChild(li);
+        }
+      }
+    }
+
+    function toggle(index) {
+      if (data[index].done === false) {
+        data[index].done = true;
+      } else {
+        data[index].done = false;
+      }
+      display ();
+    }
+
+    function deleteTask(i) {
+      data.splice(i,1)
+      display ();
+    }
+
+    // Extra confusing logic
+    setInterval(() => {
+      var allDone = true;
+      for (var z = 0; z < data.length; z++) {
+        if (data[z] && data[z].done === false) {
+          allDone = false;
+        }else{
+          allDone = true;
+        }
+      }
+      if (allDone && data.length > 0) alert("All tasks are done!");
+        
+    }, 10000);
+
+  </script>
+</body>
+</html>
